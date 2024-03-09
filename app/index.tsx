@@ -1,7 +1,7 @@
-import "react-native-url-polyfill/auto";
+import * as LocalAuthentication from "expo-local-authentication";
 import React, { useState, useEffect } from "react";
-import { supabase } from "./lib/supabase";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
+import "react-native-url-polyfill/auto";
 
 import { Redirect, router } from "expo-router";
 import { useSession } from "./hook/useSession";

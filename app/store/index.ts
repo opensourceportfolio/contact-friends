@@ -1,10 +1,13 @@
 import { create } from "zustand";
-import { SessionSlice, createSessionSlice } from "./sessionSlice";
-import { UserSlice, createUserSlice } from "./userSlice";
+import { devtools } from "zustand/middleware";
+import { FriendsSlice, createFriendsSlice } from "./friendsSlice";
+import { VisitsSlice, createVisitsSlice } from "./visitsSlice";
 
-type State = SessionSlice & UserSlice;
+type State = FriendsSlice & VisitsSlice;
 
-export const useContactFriendsStore = create<State>((...a) => ({
-	...createSessionSlice(...a),
-	...createUserSlice(...a),
-}));
+export const useContactFriendsStore = create<State>()(
+  devtools((...a) => ({
+    ...createFriendsSlice(...a),
+    ...createVisitsSlice(...a),
+  })),
+);

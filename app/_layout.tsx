@@ -1,17 +1,10 @@
-import { Link, Stack, router } from "expo-router";
-import { Button } from "@rneui/themed";
+import { Slot } from "expo-router";
+import { SessionProvider } from "./context/Session";
 
-export default function TabsLayout() {
+export default function MainLayout() {
   return (
-    <Stack
-      screenOptions={{
-        navigationBarHidden: false,
-        title: "Contact Friends",
-        headerRight: () => <Link href={"/screen/profile"}>+</Link>,
-        headerLeft: () => <Button />,
-      }}
-    >
-      <Stack.Screen name="/screen/main/list30" options={{}} />
-    </Stack>
+    <SessionProvider>
+      <Slot />
+    </SessionProvider>
   );
 }

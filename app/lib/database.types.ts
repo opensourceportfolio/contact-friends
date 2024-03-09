@@ -6,60 +6,35 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
-      frequencies: {
-        Row: {
-          created_at: string
-          frequency_option: number | null
-          id: number
-          label: string | null
-        }
-        Insert: {
-          created_at?: string
-          frequency_option?: number | null
-          id?: number
-          label?: string | null
-        }
-        Update: {
-          created_at?: string
-          frequency_option?: number | null
-          id?: number
-          label?: string | null
-        }
-        Relationships: []
-      }
       friends: {
         Row: {
+          avatar: string | null
           created_at: string
-          frequency: number | null
+          frequency: Database["public"]["Enums"]["frequency"]
           id: number
-          name: string | null
-          user_id: string | null
+          name: string
+          user_id: string
         }
         Insert: {
+          avatar?: string | null
           created_at?: string
-          frequency?: number | null
+          frequency?: Database["public"]["Enums"]["frequency"]
           id?: number
-          name?: string | null
-          user_id?: string | null
+          name: string
+          user_id?: string
         }
         Update: {
+          avatar?: string | null
           created_at?: string
-          frequency?: number | null
+          frequency?: Database["public"]["Enums"]["frequency"]
           id?: number
-          name?: string | null
-          user_id?: string | null
+          name?: string
+          user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "friends_frequency_fkey"
-            columns: ["frequency"]
-            isOneToOne: false
-            referencedRelation: "frequencies"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "friends_user_id_fkey"
             columns: ["user_id"]
@@ -71,35 +46,58 @@ export interface Database {
       }
       profiles: {
         Row: {
-          avatar_url: string | null
           full_name: string | null
           id: string
           updated_at: string | null
-          username: string | null
           website: string | null
         }
         Insert: {
-          avatar_url?: string | null
           full_name?: string | null
           id: string
           updated_at?: string | null
-          username?: string | null
           website?: string | null
         }
         Update: {
-          avatar_url?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null
-          username?: string | null
           website?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
+            foreignKeyName: "public_profiles_id_fkey"
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      visits: {
+        Row: {
+          created_at: string
+          date: string
+          friend: number
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          friend: number
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          friend?: number
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_visits_friend_fkey"
+            columns: ["friend"]
+            isOneToOne: false
+            referencedRelation: "friends"
             referencedColumns: ["id"]
           }
         ]
@@ -112,7 +110,7 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      frequency: "30" | "60" | "90" | "180"
     }
     CompositeTypes: {
       [_ in never]: never
