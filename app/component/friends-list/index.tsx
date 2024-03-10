@@ -8,17 +8,20 @@ import {
   Text,
   View,
 } from "react-native";
-import { useUserData } from "../../hook/useUserData";
+import { useFriendsData } from "../../hook/useFriendsData";
 import { Frequency } from "../../type/model";
 import { FriendRow } from "./FriendRow";
+import { lastSeen } from "../../model/frequency";
 
 type FriendsListProp = {
-  frequency: Frequency;
+  frequency?: Frequency;
 };
 
-export default function FriendsList({ frequency }: FriendsListProp) {
-  const { loading, friends, error } = useUserData();
-  const filteredFriends = friends?.filter((f) => f.frequency === frequency);
+export function FriendsList({ frequency }: FriendsListProp) {
+  const { loading, friends, error } = useFriendsData();
+  const filteredFriends = friends?.filter((f) => {
+    return frequency ? f.frequency === frequency : lastSeen(f) > parseInt(f.frequency);
+  });
 
   return loading || filteredFriends == null ? (
     <ActivityIndicator />

@@ -9,5 +9,5 @@ export const useContactFriendsStore = create<State>()(
   devtools((...a) => ({
     ...createFriendsSlice(...a),
     ...createVisitsSlice(...a),
-  })),
+  }))
 );

@@ -16,6 +16,22 @@ export default function TabsLayout() {
       <SearchBar placeholder="Type Here..." />
       <Tabs>
         <Tabs.Screen
+          name="late"
+          options={{
+            headerShown: false,
+            tabBarLabel: "Late",
+            title: "Late",
+            tabBarIcon: ({ color }) => (
+              <FontAwesome
+                size={28}
+                style={{ marginBottom: -3 }}
+                name="home"
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="list30"
           options={{
             headerShown: false,

@@ -79,18 +79,21 @@ export type Database = {
           date: string
           friend: number
           id: number
+          user_id: string
         }
         Insert: {
           created_at?: string
           date: string
           friend: number
           id?: number
+          user_id?: string
         }
         Update: {
           created_at?: string
           date?: string
           friend?: number
           id?: number
+          user_id?: string
         }
         Relationships: [
           {
@@ -99,12 +102,52 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "friends"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_visits_friend_fkey"
+            columns: ["friend"]
+            isOneToOne: false
+            referencedRelation: "friends_latest_visit"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_visits_friend_fkey"
+            columns: ["friend"]
+            isOneToOne: false
+            referencedRelation: "Friends_Latest_Visit"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_visits_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      friends_latest_visit: {
+        Row: {
+          avatar: string | null
+          frequency: Database["public"]["Enums"]["frequency"] | null
+          id: number | null
+          latest_date: string | null
+          name: string | null
+        }
+        Relationships: []
+      }
+      Friends_Latest_Visit: {
+        Row: {
+          avatar: string | null
+          frequency: Database["public"]["Enums"]["frequency"] | null
+          id: number | null
+          latest_date: string | null
+          name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

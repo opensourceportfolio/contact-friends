@@ -1,17 +1,19 @@
 import { Button, Divider, ListItem } from "@rneui/themed";
 import { Image } from "@rneui/themed";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Text, View } from "react-native";
 import { useContactFriendsStore } from "../../../../store";
+import { useRouteInfo } from "expo-router/build/hooks";
 
 type SearchParams = {
-  id: string;
+  friendId: string;
 };
 export default function Friend() {
-  const { id } = useLocalSearchParams<SearchParams>();
+  const { friendId } = useLocalSearchParams<SearchParams>();
   const friends = useContactFriendsStore((s) => s.friends);
   const addVisit = useContactFriendsStore((s) => s.addVisit);
-  const friend = friends?.find((f) => f.id.toString() === id);
+  const friend = friends?.find((f) => f.id.toString() === friendId);
+  const info = useRouteInfo()
 
   const handlePress = () => {
     if (friend) {
@@ -42,7 +44,12 @@ export default function Friend() {
           <ListItem.Subtitle>{friend.frequency}</ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
-      <ListItem>
+      <ListItem
+        onPress={() => {
+          console.log({ info });
+          router.navigate(`/screen/main/visits/${friend.id}`);
+        }}
+      >
         <ListItem.Content>
           <ListItem.Title>Days unseen</ListItem.Title>
           <ListItem.Subtitle>0</ListItem.Subtitle>
@@ -54,7 +61,7 @@ export default function Friend() {
     </View>
   ) : (
     <View>
-      <Text>Cannot find friend with id: "{id}"</Text>
+      <Text>Cannot find friend with id: "{friendId}"</Text>
     </View>
   );
 }

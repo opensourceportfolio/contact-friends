@@ -1,11 +1,12 @@
 import { Avatar, Button, ListItem } from "@rneui/themed";
 import { router } from "expo-router";
 import { useContactFriendsStore } from "../../store";
-import { Friend } from "../../type/model";
-import { DeleteButton } from "./DeleteButton";
+import { FriendWithVisit } from "../../type/model";
+import { DeleteButton } from "../DeleteButton";
+import { LastSeenMessage } from "./LastSeenMessage";
 
 type FriendRowProps = {
-  friend: Friend;
+  friend: FriendWithVisit;
 };
 
 export function FriendRow({ friend }: FriendRowProps) {
@@ -14,11 +15,15 @@ export function FriendRow({ friend }: FriendRowProps) {
   const handleRemoveFriend = () => {
     removeFriend(friend.id);
   };
+
   return (
     <ListItem.Swipeable
       bottomDivider
       leftWidth={80}
-      onPress={() => router.navigate(`/screen/main/friend/${friend.id}`)}
+      onPress={() => {
+        console.log({ friend });
+        router.navigate(`/screen/main/friend/${friend.id}`);
+      }}
       rightWidth={90}
       rightContent={() => <DeleteButton onPress={handleRemoveFriend} />}
     >
@@ -33,7 +38,9 @@ export function FriendRow({ friend }: FriendRowProps) {
       />
       <ListItem.Content>
         <ListItem.Title>{friend.name}</ListItem.Title>
-        <ListItem.Subtitle>X days ago</ListItem.Subtitle>
+        <ListItem.Subtitle>
+          <LastSeenMessage friend={friend}></LastSeenMessage>
+        </ListItem.Subtitle>
       </ListItem.Content>
     </ListItem.Swipeable>
   );

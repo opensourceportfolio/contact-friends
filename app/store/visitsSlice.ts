@@ -1,4 +1,3 @@
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { StateCreator } from "zustand";
 import { supabase } from "../lib/supabase";
 import { Friend, Profile, Visit } from "../type/model";
@@ -27,7 +26,7 @@ export const createVisitsSlice: StateCreator<VisitsSlice> = (set) => ({
       .select()
       .single();
 
-    console.log({ response });
+    console.log({ response, newVisit });
 
     if (response.error) {
       return Promise.reject(response.error);

@@ -1,14 +1,13 @@
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { StateCreator } from "zustand";
 import { supabase } from "../lib/supabase";
-import { Friend, Profile } from "../type/model";
+import { Friend, FriendWithVisit, Profile } from "../type/model";
 
 export type FriendsData = {
-  friends: Friend[] | null;
+  friends: FriendWithVisit[] | null;
 };
 
 export type FriendsSlice = FriendsData & {
-  setFriends: (fs: Friend[]) => void;
+  setFriends: (fs: FriendWithVisit[]) => void;
   addFriend: (f: Omit<Friend, "id">) => Promise<Friend>;
   removeFriend: (id: number) => Promise<void>;
 };
@@ -29,10 +28,13 @@ export const createFriendsSlice: StateCreator<FriendsSlice> = (set) => ({
             return Promise.reject(response.error);
           }
           set((s) => ({
-            friends: [...(s.friends ?? []), response.data],
+            friends: [
+              ...(s.friends ?? []),
+              { ...response.data, latest_date: null },
+            ],
           }));
           return response.data;
-        }),
+        })
     );
   },
   removeFriend: (id: number) => {
@@ -44,7 +46,7 @@ export const createFriendsSlice: StateCreator<FriendsSlice> = (set) => ({
         set((s) => ({
           friends: s.friends?.filter((f) => f.id !== id),
         }));
-      },
+      }
     );
   },
 });
