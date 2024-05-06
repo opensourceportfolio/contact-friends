@@ -1,4 +1,4 @@
-import { Avatar, Button, ListItem } from "@rneui/themed";
+import { ListItem } from "@rneui/themed";
 import { useContactFriendsStore } from "../../store";
 import { Visit } from "../../type/model";
 import { DeleteButton } from "../DeleteButton";

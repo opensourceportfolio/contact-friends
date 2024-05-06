@@ -1,9 +1,10 @@
-import { Button, Divider, ListItem } from "@rneui/themed";
-import { Image } from "@rneui/themed";
+import { Button, Divider, Image, ListItem } from "@rneui/themed";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, Text, View } from "react-native";
-import { useContactFriendsStore } from "../../../../store";
 import { useRouteInfo } from "expo-router/build/hooks";
+import { ActivityIndicator, Text, View } from "react-native";
+import { FrequencyPicker } from "../../../../component/FrequencyPicker";
+import { LastSeenMessage } from "../../../../component/friends-list/LastSeenMessage";
+import { useContactFriendsStore } from "../../../../store";
 
 type SearchParams = {
   friendId: string;
@@ -13,9 +14,8 @@ export default function Friend() {
   const friends = useContactFriendsStore((s) => s.friends);
   const addVisit = useContactFriendsStore((s) => s.addVisit);
   const friend = friends?.find((f) => f.id.toString() === friendId);
-  const info = useRouteInfo()
 
-  const handlePress = () => {
+  const handlePress: () => void = () => {
     if (friend) {
       addVisit(new Date(), friend);
     }
@@ -38,23 +38,21 @@ export default function Friend() {
         }}
         PlaceholderContent={<ActivityIndicator />}
       />
-      <ListItem>
-        <ListItem.Content>
-          <ListItem.Title>Frequency</ListItem.Title>
-          <ListItem.Subtitle>{friend.frequency}</ListItem.Subtitle>
-        </ListItem.Content>
-      </ListItem>
+
+      <FrequencyPicker friend={friend} />
+
       <ListItem
         onPress={() => {
-          console.log({ info });
           router.navigate(`/screen/main/visits/${friend.id}`);
         }}
       >
         <ListItem.Content>
           <ListItem.Title>Days unseen</ListItem.Title>
-          <ListItem.Subtitle>0</ListItem.Subtitle>
+          <ListItem.Subtitle>
+            <LastSeenMessage friend={friend} />
+          </ListItem.Subtitle>
         </ListItem.Content>
-        <ListItem.Chevron />
+        <ListItem.Chevron color={"black"} />
       </ListItem>
       <Divider />
       <Button onPress={handlePress}>Record</Button>

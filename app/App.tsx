@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./lib/supabase";
 import { StyleSheet, View, Alert, Button } from "react-native";
-import { Session } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
 import { Input } from "@rneui/themed";
 
 async function fetchProfile(session: Session) {

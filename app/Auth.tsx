@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { supabase } from "./lib/supabase";
 import { Button, Input } from "@rneui/themed";
+import { router } from "expo-router";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -15,8 +16,13 @@ export default function Auth() {
       password: password,
     });
 
-    if (response.error) Alert.alert(response.error.message);
     console.log({ response });
+
+    if (response.error) {
+      Alert.alert(response.error.message);
+    } else {
+      router.replace("/screen/main/list30");
+    }
     setLoading(false);
   }
 

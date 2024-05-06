@@ -1,7 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { SearchBar } from "@rneui/themed";
-import { Stack, Tabs } from "expo-router";
-import { Text } from "react-native";
+import { Tabs } from "expo-router";
 import { useAuth } from "../../../../hook/useAuth";
 
 export default function TabsLayout() {

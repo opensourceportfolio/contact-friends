@@ -1,8 +1,8 @@
-import { PostgrestError } from "@supabase/supabase-js";
+import type { PostgrestError } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useContactFriendsStore } from "../store";
-import { FriendWithVisit } from "../type/model";
+import type { FriendWithVisit } from "../type/model";
 
 const friendsQuery = () =>
   supabase
@@ -14,6 +14,8 @@ export function useFriendsData() {
   const [error, setError] = useState<PostgrestError>();
   const friends = useContactFriendsStore((s) => s.friends);
   const setFriends = useContactFriendsStore((s) => s.setFriends);
+  const addFriend = useContactFriendsStore((s) => s.addFriend);
+  const removeFriend = useContactFriendsStore((s) => s.removeFriend);
 
   useEffect(() => {
     if (friends == null) {
@@ -27,5 +29,5 @@ export function useFriendsData() {
     }
   }, [friends, setFriends]);
 
-  return { loading, friends, error };
+  return { loading, friends, error, setFriends, addFriend, removeFriend };
 }

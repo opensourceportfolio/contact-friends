@@ -1,9 +1,8 @@
-import * as LocalAuthentication from "expo-local-authentication";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import "react-native-url-polyfill/auto";
 
-import { Redirect, router } from "expo-router";
+import { Redirect } from "expo-router";
 import { useSession } from "./hook/useSession";
 
 export default function App() {

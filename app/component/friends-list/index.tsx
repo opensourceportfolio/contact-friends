@@ -1,6 +1,3 @@
-import { Avatar, Button, ListItem } from "@rneui/themed";
-import { Link } from "expo-router";
-import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -9,7 +6,7 @@ import {
   View,
 } from "react-native";
 import { useFriendsData } from "../../hook/useFriendsData";
-import { Frequency } from "../../type/model";
+import type { Frequency } from "../../type/model";
 import { FriendRow } from "./FriendRow";
 import { lastSeen } from "../../model/frequency";
 
@@ -20,7 +17,7 @@ type FriendsListProp = {
 export function FriendsList({ frequency }: FriendsListProp) {
   const { loading, friends, error } = useFriendsData();
   const filteredFriends = friends?.filter((f) => {
-    return frequency ? f.frequency === frequency : lastSeen(f) > parseInt(f.frequency);
+    return frequency ? f.frequency === frequency : lastSeen(f) > Number.parseInt(f.frequency);
   });
 
   return loading || filteredFriends == null ? (

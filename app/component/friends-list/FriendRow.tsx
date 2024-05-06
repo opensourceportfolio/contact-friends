@@ -1,7 +1,7 @@
 import { Avatar, Button, ListItem } from "@rneui/themed";
 import { router } from "expo-router";
 import { useContactFriendsStore } from "../../store";
-import { FriendWithVisit } from "../../type/model";
+import type { FriendWithVisit } from "../../type/model";
 import { DeleteButton } from "../DeleteButton";
 import { LastSeenMessage } from "./LastSeenMessage";
 
@@ -21,7 +21,6 @@ export function FriendRow({ friend }: FriendRowProps) {
       bottomDivider
       leftWidth={80}
       onPress={() => {
-        console.log({ friend });
         router.navigate(`/screen/main/friend/${friend.id}`);
       }}
       rightWidth={90}
@@ -39,7 +38,7 @@ export function FriendRow({ friend }: FriendRowProps) {
       <ListItem.Content>
         <ListItem.Title>{friend.name}</ListItem.Title>
         <ListItem.Subtitle>
-          <LastSeenMessage friend={friend}></LastSeenMessage>
+          <LastSeenMessage friend={friend} />
         </ListItem.Subtitle>
       </ListItem.Content>
     </ListItem.Swipeable>
