@@ -15,14 +15,16 @@ export function useVisitsData(friendId: number) {
   const addVisit = useContactFriendsStore((s) => s.addVisit);
 
   useEffect(() => {
-    setVisits([]);
-    setLoading(true);
-    visitsQuery(friendId).then(({ data, error }) => {
-      setLoading(false);
-      setVisits(data ?? []);
-      setError(error ?? undefined);
-    });
-  }, [friendId, setVisits]);
+    if (visits == null) {
+      setVisits([]);
+      setLoading(true);
+      visitsQuery(friendId).then(({ data, error }) => {
+        setLoading(false);
+        setVisits(data ?? []);
+        setError(error ?? undefined);
+      });
+    }
+  }, [visits, friendId, setVisits]);
 
   return { loading, visits, error, setVisits, addVisit, removeVisit };
 }

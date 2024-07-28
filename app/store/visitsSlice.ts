@@ -13,6 +13,7 @@ export type VisitsSlice = VisitsData & {
   setVisits: (vs: Visit[]) => void;
   addVisit: (date: Date, friend: Friend) => Promise<Visit>;
   removeVisit: (id: number) => Promise<void>;
+  updateVisit: (visit: Visit) => Promise<void>;
 };
 
 export const createVisitsSlice: StateCreator<
@@ -94,4 +95,35 @@ export const createVisitsSlice: StateCreator<
       };
     });
   },
+  updateVisit: async (visit: Visit) => {
+    const response = await supabase.from("visits").update({date: visit.date}).eq("id", visit.id)
+
+    console.log({ response }, "updateVisit");
+
+    if (response.error) {
+      return Promise.reject(response.error);
+    }
+
+    const updatedVisits = get().visits?.map(v => v.id === visit.id ? visit : v) ?? []
+    const friend = get().friends?.find((f) => f.id === visit?.friend);
+
+    if (friend == null) {
+      return Promise.reject("Invalid friend for visit");
+    }
+
+    set((s) => ({
+      visits: updatedVisits,
+      friends: s.friends?.map((f) => {
+        const nextFriend: FriendWithVisit =
+          f.id === friend.id
+            ? {
+                ...friend,
+                latest_date: latestVisitDate(updatedVisits),
+              }
+            : f;
+
+        return nextFriend;
+      }),
+    }))
+  }
 });

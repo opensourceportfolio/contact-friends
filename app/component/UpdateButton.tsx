@@ -1,10 +1,10 @@
 import { Button } from "@rneui/themed";
 
-type DeleteButtonProps = {
+type UpdateButtonProps = {
   onPress: () => void;
 };
 
-export function DeleteButton({ onPress }: DeleteButtonProps) {
+export function UpdateButton({ onPress }: UpdateButtonProps) {
   return (
     <Button
       containerStyle={{
@@ -12,11 +12,8 @@ export function DeleteButton({ onPress }: DeleteButtonProps) {
         justifyContent: "center",
         backgroundColor: "#f4f4f4",
       }}
-      type="clear"
-      icon={{
-        type: "ionic",
-        name: "delete-outline",
-      }}
+      type="outline"
+      icon={{ type: "antdesign", name: "edit" }}
       onPress={onPress}
     />
   );

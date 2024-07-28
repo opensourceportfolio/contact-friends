@@ -1,30 +1,42 @@
-import { Avatar, Button, ListItem } from "@rneui/themed";
-import { router } from "expo-router";
+import { Avatar, Button, Icon, ListItem } from "@rneui/themed";
+import { Link } from "expo-router";
+import { type StyleProp, View, type ViewStyle } from "react-native";
 import { useContactFriendsStore } from "../../store";
 import type { FriendWithVisit } from "../../type/model";
-import { DeleteButton } from "../DeleteButton";
+import { SwipeableRow } from "../SwipeableRow";
 import { LastSeenMessage } from "./LastSeenMessage";
 
 type FriendRowProps = {
   friend: FriendWithVisit;
+  isSelected: boolean;
+  onSelect: (friend: FriendWithVisit) => void;
 };
 
-export function FriendRow({ friend }: FriendRowProps) {
+const recordStyle: StyleProp<ViewStyle> = {
+  width: "100%",
+  marginTop: 5,
+};
+export function FriendRow({ friend, isSelected, onSelect }: FriendRowProps) {
+  const addVisit = useContactFriendsStore((s) => s.addVisit);
   const removeFriend = useContactFriendsStore((s) => s.removeFriend);
+
+  const handleUpdateFriend = () => {};
 
   const handleRemoveFriend = () => {
     removeFriend(friend.id);
   };
 
+  const handleRecordVisit = () => {
+    addVisit(new Date(), friend);
+  };
+
   return (
-    <ListItem.Swipeable
-      bottomDivider
-      leftWidth={80}
+    <SwipeableRow
+      onUpdate={handleUpdateFriend}
+      onRemove={handleRemoveFriend}
       onPress={() => {
-        router.navigate(`/screen/main/friend/${friend.id}`);
+        onSelect(friend);
       }}
-      rightWidth={90}
-      rightContent={() => <DeleteButton onPress={handleRemoveFriend} />}
     >
       <Avatar
         rounded
@@ -40,7 +52,15 @@ export function FriendRow({ friend }: FriendRowProps) {
         <ListItem.Subtitle>
           <LastSeenMessage friend={friend} />
         </ListItem.Subtitle>
+        {isSelected && (
+          <View style={recordStyle}>
+            <Button title="Record" onPress={handleRecordVisit} />
+          </View>
+        )}
       </ListItem.Content>
-    </ListItem.Swipeable>
+      <Link href={`/screen/main/friend/${friend.id}`}>
+        <Icon name="chevron-right" />
+      </Link>
+    </SwipeableRow>
   );
 }

@@ -3,11 +3,11 @@ import * as ImagePicker from "expo-image-picker";
 import { Stack, router } from "expo-router";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { FrequencyLabels } from "../../../model/frequency";
-import { useContactFriendsStore } from "../../../store";
-import { Frequency } from "../../../type/model";
+import { FrequencyLabels } from "../../../../model/frequency";
+import { useContactFriendsStore } from "../../../../store";
+import type { Frequency } from "../../../../type/model";
 
-export default function Friend() {
+export default function Edit() {
   const [name, setName] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState(0);
   const [loading, setLoading] = useState(false);

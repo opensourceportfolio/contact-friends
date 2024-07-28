@@ -1,10 +1,9 @@
 import { Button, Divider, Image, ListItem } from "@rneui/themed";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { useRouteInfo } from "expo-router/build/hooks";
 import { ActivityIndicator, Text, View } from "react-native";
-import { FrequencyPicker } from "../../../../component/FrequencyPicker";
 import { LastSeenMessage } from "../../../../component/friends-list/LastSeenMessage";
 import { useContactFriendsStore } from "../../../../store";
+import { FrequencyLabels } from "../../../../model/frequency";
 
 type SearchParams = {
   friendId: string;
@@ -39,11 +38,18 @@ export default function Friend() {
         PlaceholderContent={<ActivityIndicator />}
       />
 
-      <FrequencyPicker friend={friend} />
+      <ListItem>
+        <ListItem.Content>
+          <ListItem.Title>Frequency</ListItem.Title>
+          <ListItem.Subtitle>
+            {FrequencyLabels[friend.frequency]}
+          </ListItem.Subtitle>
+        </ListItem.Content>
+      </ListItem>
 
       <ListItem
         onPress={() => {
-          router.navigate(`/screen/main/visits/${friend.id}`);
+          router.navigate(`/screen/main/friend/visits/${friend.id}`);
         }}
       >
         <ListItem.Content>
