@@ -4,7 +4,11 @@ import { supabase } from "../lib/supabase";
 import { useContactFriendsStore } from "../store";
 
 const visitsQuery = (id: number) =>
-  supabase.from("visits").select("*").eq("friend", id);
+  supabase
+    .from("visits")
+    .select("*")
+    .filter("deleted", "", false)
+    .eq("friend", id);
 
 export function useVisitsData(friendId: number) {
   const [loading, setLoading] = useState<boolean>();

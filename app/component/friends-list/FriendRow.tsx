@@ -1,5 +1,5 @@
 import { Avatar, Button, Icon, ListItem } from "@rneui/themed";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { type StyleProp, View, type ViewStyle } from "react-native";
 import { useContactFriendsStore } from "../../store";
 import type { FriendWithVisit } from "../../type/model";
@@ -20,7 +20,9 @@ export function FriendRow({ friend, isSelected, onSelect }: FriendRowProps) {
   const addVisit = useContactFriendsStore((s) => s.addVisit);
   const removeFriend = useContactFriendsStore((s) => s.removeFriend);
 
-  const handleUpdateFriend = () => {};
+  const handleUpdateFriend = () => {
+    router.push(`/screen/main/friend/edit?friendId=${friend.id}`)
+  };
 
   const handleRemoveFriend = () => {
     removeFriend(friend.id);

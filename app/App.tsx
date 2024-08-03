@@ -9,6 +9,7 @@ async function fetchProfile(session: Session) {
 		.from("profiles")
 		.select("username, website, avatar_url, friends(name, frequency)")
 		.eq("id", session?.user.id)
+		.filter("deleted", "", false)
 		.single();
 }
 
@@ -61,6 +62,7 @@ export default function Account({ session }: { session: Session }) {
 				website,
 				avatar_url,
 				updated_at: new Date(),
+				deleted: false,
 			};
 
 			const { error } = await supabase.from("profiles").upsert(updates);

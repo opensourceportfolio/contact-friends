@@ -8,6 +8,7 @@ import { FrequencyLabels } from "../../../../model/frequency";
 type SearchParams = {
   friendId: string;
 };
+
 export default function Friend() {
   const { friendId } = useLocalSearchParams<SearchParams>();
   const friends = useContactFriendsStore((s) => s.friends);

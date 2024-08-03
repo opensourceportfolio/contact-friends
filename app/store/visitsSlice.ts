@@ -60,7 +60,10 @@ export const createVisitsSlice: StateCreator<
     return response.data;
   },
   removeVisit: async (id: number) => {
-    const response = await supabase.from("visits").delete().eq("id", id);
+    const response = await supabase
+      .from("visits")
+      .update({ deleted: true })
+      .eq("id", id);
 
     console.log({ response }, "removeVisit");
 
@@ -96,7 +99,10 @@ export const createVisitsSlice: StateCreator<
     });
   },
   updateVisit: async (visit: Visit) => {
-    const response = await supabase.from("visits").update({date: visit.date}).eq("id", visit.id)
+    const response = await supabase
+      .from("visits")
+      .update({ date: visit.date })
+      .eq("id", visit.id);
 
     console.log({ response }, "updateVisit");
 
@@ -104,7 +110,8 @@ export const createVisitsSlice: StateCreator<
       return Promise.reject(response.error);
     }
 
-    const updatedVisits = get().visits?.map(v => v.id === visit.id ? visit : v) ?? []
+    const updatedVisits =
+      get().visits?.map((v) => (v.id === visit.id ? visit : v)) ?? [];
     const friend = get().friends?.find((f) => f.id === visit?.friend);
 
     if (friend == null) {
@@ -124,6 +131,6 @@ export const createVisitsSlice: StateCreator<
 
         return nextFriend;
       }),
-    }))
-  }
+    }));
+  },
 });

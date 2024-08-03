@@ -1,20 +1,42 @@
 import { Button, ButtonGroup, Image, Input } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { FrequencyLabels } from "../../../../model/frequency";
 import { useContactFriendsStore } from "../../../../store";
 import type { Frequency } from "../../../../type/model";
 
+type SearchParams = {
+  friendId?: string;
+};
+
 export default function Edit() {
-  const [name, setName] = useState("");
-  const [selectedFrequency, setSelectedFrequency] = useState(0);
+  const { friendId } = useLocalSearchParams<SearchParams>();
   const [loading, setLoading] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(
-    "https://placehold.co/200/png",
-  );
   const addFriend = useContactFriendsStore((s) => s.addFriend);
+  const updateFriend = useContactFriendsStore((s) => s.updateFriend);
+  const friends = useContactFriendsStore((s) => s.friends);
+  const friend = friends?.find((f) => friendId && f.id === Number(friendId));
+
+  const frequencyOptions = Object.keys(FrequencyLabels) as Frequency[];
+  const frequencyValues = Object.values(FrequencyLabels);
+  const initialSelectedIndex =
+    frequencyOptions.findIndex((f) => friend?.frequency) ?? 0;
+
+  console.log({
+    frequencyOptions,
+    frequencyValues,
+    initialSelectedIndex,
+    friend,
+  });
+
+  const [name, setName] = useState(friend?.name ?? "");
+  const [selectedFrequency, setSelectedFrequency] =
+    useState(initialSelectedIndex);
+  const [avatar, setAvatar] = useState<string | null>(
+    friend?.avatar ?? "https://placehold.co/200/png",
+  );
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -36,19 +58,20 @@ export default function Edit() {
     setLoading(true);
     const frequency = frequencyOptions[selectedFrequency];
 
-    addFriend({ name, frequency, avatar })
-      .then((f) => {
-        setLoading(false);
-        router.navigate("/screen/main/list30");
-      })
-      .catch((e) => {
-        setLoading(false);
-        console.log({ e });
-      });
+    try {
+      if (friend) {
+        updateFriend({ id: friend.id, name, frequency, avatar, latest_date: friend.latest_date });
+      } else {
+        addFriend({ name, frequency, avatar });
+      }
+    } catch (e) {
+      setLoading(false);
+      console.log({ e });
+    } finally {
+      setLoading(false);
+      router.navigate("/screen/main/list30");
+    }
   };
-
-  const frequencyOptions = Object.keys(FrequencyLabels) as Frequency[];
-  const frequencyValues = Object.values(FrequencyLabels);
 
   return (
     <View>
