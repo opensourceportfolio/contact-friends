@@ -21,7 +21,7 @@ export function FriendRow({ friend, isSelected, onSelect }: FriendRowProps) {
   const removeFriend = useContactFriendsStore((s) => s.removeFriend);
 
   const handleUpdateFriend = () => {
-    router.push(`/screen/main/friend/edit?friendId=${friend.id}`)
+    router.push(`/screen/main/friend/edit?friendId=${friend.id}`);
   };
 
   const handleRemoveFriend = () => {

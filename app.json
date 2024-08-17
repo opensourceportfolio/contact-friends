@@ -18,7 +18,8 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSFaceIDUsageDescription": "Allow $(PRODUCT_NAME) to use Face ID."
-      }
+      },
+      "bundleIdentifier": "com.leontager.contactfriends"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,7 +30,8 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.USE_BIOMETRIC",
         "android.permission.USE_FINGERPRINT"
-      ]
+      ],
+      "package": "com.leontager.contactfriends"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -49,7 +51,7 @@
         }
       ]
     ],
-    "scheme": "contact-friends",
+    "scheme": "com.leontager.contact-friends",
     "experiments": {
       "typedRoutes": true
     },

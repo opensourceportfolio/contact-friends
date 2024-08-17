@@ -22,7 +22,7 @@ export function useFriendsData() {
       setFriends([]);
       setLoading(true);
       friendsQuery().then(({ data, error }) => {
-        console.log({data, error})
+        console.log({ data, error });
         setFriends((data as FriendWithVisit[]) ?? []);
         setError(error ?? undefined);
         setLoading(false);

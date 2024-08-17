@@ -1,6 +1,7 @@
 import type { StateCreator } from "zustand";
 import { supabase } from "../lib/supabase";
 import type { Friend, FriendWithVisit } from "../type/model";
+import type { VisitsSlice } from "./visitsSlice";
 
 export type FriendsData = {
   friends: FriendWithVisit[] | null;
@@ -11,9 +12,15 @@ export type FriendsSlice = FriendsData & {
   addFriend: (f: Omit<Friend, "id">) => Promise<Friend>;
   removeFriend: (id: number) => Promise<void>;
   updateFriend: (friend: FriendWithVisit) => Promise<void>;
+  resetFriends: () => void;
 };
 
-export const createFriendsSlice: StateCreator<FriendsSlice> = (set) => ({
+export const createFriendsSlice: StateCreator<
+  VisitsSlice & FriendsSlice,
+  [],
+  [],
+  FriendsSlice
+> = (set) => ({
   friends: null,
 
   setFriends: (friends) => set(() => ({ friends })),
@@ -39,7 +46,10 @@ export const createFriendsSlice: StateCreator<FriendsSlice> = (set) => ({
   },
 
   removeFriend: async (id: number) => {
-    const response = await supabase.from("friends").update({deleted: true}).eq("id", id);
+    const response = await supabase
+      .from("friends")
+      .update({ deleted: true })
+      .eq("id", id);
 
     console.log({ id, response }, "removeFriend");
 
@@ -72,5 +82,12 @@ export const createFriendsSlice: StateCreator<FriendsSlice> = (set) => ({
       ...s,
       friends: s.friends?.map((f) => (f.id === friend.id ? friend : f)),
     }));
+  },
+
+  resetFriends: () => {
+    set({
+      friends: [],
+      visits: []
+    });
   },
 });

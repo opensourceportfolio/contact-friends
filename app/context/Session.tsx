@@ -50,6 +50,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
       });
 
     supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("auth state change for email: ", session?.user.email);
       setState({
         ...initialState,
         session: session,

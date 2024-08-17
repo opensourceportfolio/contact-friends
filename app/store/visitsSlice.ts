@@ -65,8 +65,6 @@ export const createVisitsSlice: StateCreator<
       .update({ deleted: true })
       .eq("id", id);
 
-    console.log({ response }, "removeVisit");
-
     if (response.error) {
       return Promise.reject(response.error);
     }

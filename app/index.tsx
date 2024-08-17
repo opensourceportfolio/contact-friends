@@ -4,12 +4,15 @@ import "react-native-url-polyfill/auto";
 
 import { Redirect } from "expo-router";
 import { useSession } from "./hook/useSession";
+import { supabase } from "./lib/supabase";
 
 export default function App() {
   const { session, loading } = useSession();
 
   if (session) {
-    return <Redirect href="/screen/main/list30" />;
+    console.log("user", session.user.id);
+    // supabase.auth.signOut();
+    return <Redirect href="/screen/main/late" />;
   }
 
   if (!loading && session == null) {
