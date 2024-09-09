@@ -7,14 +7,14 @@ import { useContactFriendsStore } from "../../../store";
 
 export default function Profile() {
   const [loading] = useState(false);
-  const resetFriends = useContactFriendsStore((s) => s.resetFriends);
+  const logout = useContactFriendsStore((s) => s.logout);
 
   async function handleLogout() {
     const response = await supabase.auth.signOut();
     if (response.error) {
       Alert.alert(response.error.message);
     }
-    resetFriends();
+    logout();
     router.replace("/Auth");
   }
   return (

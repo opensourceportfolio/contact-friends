@@ -1,9 +1,9 @@
 import type { StateCreator } from "zustand";
+import type { State } from ".";
 import { supabase } from "../lib/supabase";
 import { maxDate } from "../model/frequency";
 import { latestVisitDate } from "../model/visit";
 import type { Friend, FriendWithVisit, Visit } from "../type/model";
-import type { FriendsSlice } from "./friendsSlice";
 
 export type VisitsData = {
   visits: Visit[] | null;
@@ -16,14 +16,14 @@ export type VisitsSlice = VisitsData & {
   updateVisit: (visit: Visit) => Promise<void>;
 };
 
-export const createVisitsSlice: StateCreator<
-  VisitsSlice & FriendsSlice,
-  [],
-  [],
-  VisitsSlice
-> = (set, get) => ({
+export const createVisitsSlice: StateCreator<State, [], [], VisitsSlice> = (
+  set,
+  get,
+) => ({
   visits: null,
+
   setVisits: (visits) => set(() => ({ visits })),
+
   addVisit: async (date, friend) => {
     const isoDate = date.toISOString();
     const newVisit: Omit<Visit, "id"> = {
@@ -59,6 +59,7 @@ export const createVisitsSlice: StateCreator<
 
     return response.data;
   },
+
   removeVisit: async (id: number) => {
     const response = await supabase
       .from("visits")

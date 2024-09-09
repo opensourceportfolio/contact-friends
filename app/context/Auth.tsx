@@ -20,7 +20,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setState({ authenticated: result.success });
     }
 
-    // authenticate();
+    authenticate();
   }, []);
 
   return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;

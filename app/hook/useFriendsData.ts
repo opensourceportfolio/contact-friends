@@ -10,7 +10,7 @@ const friendsQuery = () =>
     .select("id, name, avatar, frequency, latest_date");
 
 export function useFriendsData() {
-  const [loading, setLoading] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<PostgrestError>();
   const friends = useContactFriendsStore((s) => s.friends);
   const setFriends = useContactFriendsStore((s) => s.setFriends);

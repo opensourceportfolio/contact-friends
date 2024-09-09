@@ -3,7 +3,7 @@ import { Stack, router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
 import { Calendar, type CalendarProps } from "react-native-calendars";
-import { AsyncPage } from "../../../../../../component/AsyncPage";
+import { AsyncComponent } from "../../../../../../component/AsyncComponent";
 import { useVisitData } from "../../../../../../hook/useVisitData";
 import { useContactFriendsStore } from "../../../../../../store";
 
@@ -47,7 +47,7 @@ export default function Edit() {
   }
 
   return (
-    <AsyncPage error={error} loading={loading}>
+    <AsyncComponent error={error} loading={loading}>
       <View>
         <Stack.Screen
           options={{
@@ -58,6 +58,6 @@ export default function Edit() {
         <Calendar {...calendar} />
         <Button title="Update" onPress={handlePress} />
       </View>
-    </AsyncPage>
+    </AsyncComponent>
   );
 }

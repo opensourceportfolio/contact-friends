@@ -1,14 +1,10 @@
 import { useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
+import Toast from "react-native-toast-message";
 import { useFriendsData } from "../../hook/useFriendsData";
 import { lastSeen } from "../../model/frequency";
 import type { Frequency, FriendWithVisit } from "../../type/model";
+import { AsyncComponent } from "../AsyncComponent";
 import { FriendRow } from "./FriendRow";
 
 type FriendsListProp = {
@@ -33,25 +29,23 @@ export function FriendsList({ frequency }: FriendsListProp) {
     }
   }
 
-  return loading || filteredFriends == null ? (
-    <ActivityIndicator />
-  ) : error ? (
-    <Text>Error: {error.message}</Text>
-  ) : (
-    <View style={styles.container}>
-      <FlatList
-        data={filteredFriends}
-        renderItem={(friend) => {
-          return (
-            <FriendRow
-              friend={friend.item}
-              onSelect={handleOnSelect}
-              isSelected={selectedFriend === friend.item}
-            />
-          );
-        }}
-      />
-    </View>
+  return (
+    <AsyncComponent error={error} loading={loading || filteredFriends == null}>
+      <View style={styles.container}>
+        <FlatList
+          data={filteredFriends}
+          renderItem={(friend) => {
+            return (
+              <FriendRow
+                friend={friend.item}
+                onSelect={handleOnSelect}
+                isSelected={selectedFriend === friend.item}
+              />
+            );
+          }}
+        />
+      </View>
+    </AsyncComponent>
   );
 }
 

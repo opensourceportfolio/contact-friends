@@ -8,7 +8,7 @@ type AsyncPageProps = {
   children: ReactNode;
 };
 
-export function AsyncPage({ error, loading, children }: AsyncPageProps) {
+export function AsyncComponent({ error, loading, children }: AsyncPageProps) {
   return loading ? (
     <ActivityIndicator />
   ) : error ? (

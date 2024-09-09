@@ -1,6 +1,7 @@
 import type { Session } from "@supabase/supabase-js";
 import { createContext, useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { useContactFriendsStore } from "../store";
 
 type SessionState =
   | { session: Session; loading: false }
@@ -18,6 +19,7 @@ export const SessionContext = createContext<SessionState>(initialState);
 
 export function SessionProvider({ children }: SessionProviderProps) {
   const [state, setState] = useState<SessionState>(initialState);
+  const setUserId = useContactFriendsStore(s => s.setUserId)
 
   useEffect(() => {
     setState({
@@ -38,6 +40,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
             ...initialState,
             session: session,
           });
+          setUserId(session.user.id)
         }
       })
       .catch((reason) => {
@@ -53,10 +56,10 @@ export function SessionProvider({ children }: SessionProviderProps) {
       console.log("auth state change for email: ", session?.user.email);
       setState({
         ...initialState,
-        session: session,
+        session,
       });
     });
-  }, []);
+  }, [setUserId]);
 
   return (
     <SessionContext.Provider value={state}>{children}</SessionContext.Provider>

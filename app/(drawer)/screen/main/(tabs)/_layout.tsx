@@ -1,4 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Fontisto from "@expo/vector-icons/Fontisto";
 import { SearchBar } from "@rneui/themed";
 import { Tabs } from "expo-router";
 import { useAuth } from "../../../../hook/useAuth";
@@ -12,7 +15,6 @@ export default function TabsLayout() {
 
   return (
     <>
-      <SearchBar placeholder="Type Here..." />
       <Tabs>
         <Tabs.Screen
           name="late"
@@ -21,10 +23,10 @@ export default function TabsLayout() {
             tabBarLabel: "Late",
             title: "Late",
             tabBarIcon: ({ color }) => (
-              <FontAwesome
+              <MaterialIcons
                 size={28}
                 style={{ marginBottom: -3 }}
-                name="home"
+                name="watch-later"
                 color={color}
               />
             ),
@@ -40,7 +42,7 @@ export default function TabsLayout() {
               <FontAwesome
                 size={28}
                 style={{ marginBottom: -3 }}
-                name="home"
+                name="calendar"
                 color={color}
               />
             ),
@@ -53,10 +55,10 @@ export default function TabsLayout() {
             tabBarLabel: "60",
             title: "60",
             tabBarIcon: ({ color }) => (
-              <FontAwesome
+              <FontAwesome6
                 size={28}
                 style={{ marginBottom: -3 }}
-                name="home"
+                name="check-double"
                 color={color}
               />
             ),
@@ -69,10 +71,10 @@ export default function TabsLayout() {
             tabBarLabel: "90",
             title: "90",
             tabBarIcon: ({ color }) => (
-              <FontAwesome
+              <Fontisto
                 size={28}
                 style={{ marginBottom: -3 }}
-                name="home"
+                name="pie-chart-1"
                 color={color}
               />
             ),

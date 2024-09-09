@@ -3,7 +3,8 @@ import type { AuthError } from "@supabase/supabase-js";
 import { makeRedirectUri } from "expo-auth-session";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { AsyncComponent } from "../component/AsyncComponent";
 import { supabase } from "../lib/supabase";
 
 export type Params = {
@@ -34,16 +35,12 @@ export default function Confirm() {
       });
   }, [email]);
 
-  return loading ? (
-    <ActivityIndicator />
-  ) : error ? (
-    <View style={styles.container}>
-      <Text h2>{error.message}</Text>
-    </View>
-  ) : (
-    <View style={styles.container}>
-      <Text h2>Check your email</Text>
-    </View>
+  return (
+    <AsyncComponent error={error} loading={loading}>
+      <View style={styles.container}>
+        <Text h2>Check your email</Text>
+      </View>
+    </AsyncComponent>
   );
 }
 

@@ -1,7 +1,7 @@
 import { Stack, useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { AsyncPage } from "../../../../../component/AsyncPage";
+import { AsyncComponent } from "../../../../../component/AsyncComponent";
 import { VisitRow } from "../../../../../component/visits-list/VisitRow";
 import { useVisitsData } from "../../../../../hook/useVisitsData";
 
@@ -15,7 +15,7 @@ export default function Visits() {
   const { visits, loading, error } = useVisitsData(id);
 
   return (
-    <AsyncPage loading={loading} error={error}>
+    <AsyncComponent loading={loading} error={error}>
       <View>
         <Stack.Screen
           options={{
@@ -28,6 +28,6 @@ export default function Visits() {
           renderItem={(visit) => <VisitRow visit={visit.item} />}
         />
       </View>
-    </AsyncPage>
+    </AsyncComponent>
   );
 }

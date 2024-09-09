@@ -17,6 +17,7 @@ const recordStyle: StyleProp<ViewStyle> = {
   marginTop: 5,
 };
 export function FriendRow({ friend, isSelected, onSelect }: FriendRowProps) {
+  const { avatar } = friend;
   const addVisit = useContactFriendsStore((s) => s.addVisit);
   const removeFriend = useContactFriendsStore((s) => s.removeFriend);
 
@@ -42,11 +43,22 @@ export function FriendRow({ friend, isSelected, onSelect }: FriendRowProps) {
     >
       <Avatar
         rounded
-        icon={{
-          name: "person",
-          type: "ionic",
-          size: 26,
-        }}
+        source={
+          avatar
+            ? {
+                uri: `data:image/jpeg;base64,${avatar}`,
+              }
+            : undefined
+        }
+        icon={
+          avatar
+            ? undefined
+            : {
+                name: "person",
+                type: "ionic",
+                size: 26,
+              }
+        }
         containerStyle={{ backgroundColor: "#c2c2c2" }}
       />
       <ListItem.Content>

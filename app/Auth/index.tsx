@@ -8,6 +8,7 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../lib/supabase";
 import type { Params } from "./confirm";
+import { useContactFriendsStore } from "../store";
 
 
 const createSessionFromUrl = async (url: string) => {
@@ -35,7 +36,9 @@ const handleUrlChange: Linking.URLListener = (e) => {
 export default function Auth() {
   const [error, setError] = useState<AuthError>();
   const [email, setEmail] = useState("");
-  const url = Linking.useURL();
+  const friends = useContactFriendsStore((s) => s.friends);
+
+  console.log("Auth", { friends })
 
   const sendMagicLink = async (email: string) => {
     router.navigate<Params>({ pathname: "/Auth/confirm", params: { email } });

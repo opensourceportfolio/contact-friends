@@ -2,7 +2,7 @@ import { Button, ButtonGroup, Image, Input } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { FrequencyLabels } from "../../../../model/frequency";
 import { useContactFriendsStore } from "../../../../store";
 import type { Frequency } from "../../../../type/model";
@@ -21,36 +21,28 @@ export default function Edit() {
 
   const frequencyOptions = Object.keys(FrequencyLabels) as Frequency[];
   const frequencyValues = Object.values(FrequencyLabels);
-  const initialSelectedIndex =
-    frequencyOptions.findIndex((f) => friend?.frequency) ?? 0;
-
-  console.log({
-    frequencyOptions,
-    frequencyValues,
-    initialSelectedIndex,
-    friend,
-  });
+  const initialSelectedIndex = Math.max(
+    frequencyOptions.findIndex((f) => friend?.frequency),
+    0,
+  );
 
   const [name, setName] = useState(friend?.name ?? "");
   const [selectedFrequency, setSelectedFrequency] =
     useState(initialSelectedIndex);
-  const [avatar, setAvatar] = useState<string | null>(
-    friend?.avatar ?? "https://placehold.co/200/png",
-  );
+  const [avatar, setAvatar] = useState<string | null>(friend?.avatar ?? null);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+      aspect: [1, 1],
+      quality: 0,
+      base64: true,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
-      setAvatar(result.assets[0].uri);
+      setAvatar(result.assets[0].base64 ?? null);
     }
   };
 
@@ -60,7 +52,13 @@ export default function Edit() {
 
     try {
       if (friend) {
-        updateFriend({ id: friend.id, name, frequency, avatar, latest_date: friend.latest_date });
+        updateFriend({
+          id: friend.id,
+          name,
+          frequency,
+          avatar,
+          latest_date: friend.latest_date,
+        });
       } else {
         addFriend({ name, frequency, avatar });
       }
@@ -74,7 +72,7 @@ export default function Edit() {
   };
 
   return (
-    <View>
+    <View style={styles.layout}>
       <Stack.Screen
         options={{
           title: "Add new friend",
@@ -86,6 +84,7 @@ export default function Edit() {
         leftIcon={{ type: "ionicon", name: "person-circle" }}
         onChangeText={(text) => setName(text)}
         value={name}
+        autoFocus
         placeholder="John Doe"
         autoCapitalize="words"
       />
@@ -98,15 +97,45 @@ export default function Edit() {
         containerStyle={{ marginBottom: 20 }}
       />
       {avatar && (
-        <Image
-          onPress={pickImage}
-          source={{ uri: avatar }}
-          style={{ width: 200, height: 200 }}
-        />
+        <View style={styles.avatarPreview}>
+          <Image
+            style={styles.avatar}
+            onPress={pickImage}
+            source={{
+              uri: avatar
+                ? `data:image/jpeg;base64,${avatar}`
+                : "https://placehold.co/200/png",
+            }}
+          />
+        </View>
       )}
-      <Button loading={loading} onPress={handleSave}>
+      <Button loading={loading} onPress={handleSave} style={styles.saveButton}>
         Save
       </Button>
     </View>
   );
 }
+
+const screenWidth = Dimensions.get("window").width;
+
+const styles = StyleSheet.create({
+  avatar: {
+    aspectRatio: 1,
+    height: screenWidth / 2,
+    width: screenWidth / 2,
+  },
+  avatarPreview: {
+    alignItems: "center",
+  },
+  saveButton: {
+    width: "100%",
+  },
+  layout: {
+    // backgroundColor: "blue",
+    gap: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    marginTop: 20,
+  },
+});

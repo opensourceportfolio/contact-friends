@@ -1,7 +1,7 @@
 import type { StateCreator } from "zustand";
+import type { State } from ".";
 import { supabase } from "../lib/supabase";
 import type { Friend, FriendWithVisit } from "../type/model";
-import type { VisitsSlice } from "./visitsSlice";
 
 export type FriendsData = {
   friends: FriendWithVisit[] | null;
@@ -15,24 +15,26 @@ export type FriendsSlice = FriendsData & {
   resetFriends: () => void;
 };
 
-export const createFriendsSlice: StateCreator<
-  VisitsSlice & FriendsSlice,
-  [],
-  [],
-  FriendsSlice
-> = (set) => ({
+export const createFriendsSlice: StateCreator<State, [], [], FriendsSlice> = (
+  set,
+  get,
+) => ({
   friends: null,
 
   setFriends: (friends) => set(() => ({ friends })),
 
   addFriend: async (friend) => {
+    const { userId } = get();
+
+    if (userId == null) {
+      return Promise.reject("Not authenticated");
+    }
+
     const response = await supabase
       .from("friends")
       .insert(friend)
       .select()
       .single();
-
-    console.log({ response });
 
     if (response.error) {
       return Promise.reject(response.error);
@@ -62,7 +64,15 @@ export const createFriendsSlice: StateCreator<
     }));
   },
 
-  updateFriend: async (friend: FriendWithVisit) => {
+  async updateFriend(friend: FriendWithVisit){
+    const { userId } = get();
+    
+    if (userId == null) {
+      return Promise.reject("Not authenticated");
+    }
+
+    const oldFriend = this.friends?.find(f => f.id === friend.id)
+
     const response = await supabase
       .from("friends")
       .update({
@@ -71,8 +81,6 @@ export const createFriendsSlice: StateCreator<
         frequency: friend.frequency,
       })
       .eq("id", friend.id);
-
-    console.log(friend, { response }, "updateFriend");
 
     if (response.error) {
       return Promise.reject(response.error);
@@ -86,8 +94,8 @@ export const createFriendsSlice: StateCreator<
 
   resetFriends: () => {
     set({
-      friends: [],
-      visits: []
+      friends: null,
+      visits: null,
     });
   },
 });

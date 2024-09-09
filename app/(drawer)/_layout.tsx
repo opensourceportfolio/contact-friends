@@ -13,7 +13,10 @@ export default function DrawerLayout() {
             drawerLabel: "Friends",
             title: "Friends",
             headerRight: () => (
-              <Link href="/screen/main/friend/edit">
+              <Link
+                href="/screen/main/friend/edit"
+                style={{ paddingRight: 20 }}
+              >
                 <Icon name="account-plus" type="material-community" />
               </Link>
             ),
@@ -24,11 +27,7 @@ export default function DrawerLayout() {
           options={{
             drawerLabel: "Profile",
             title: "Profile",
-            headerRight: () => (
-              <Link href="/screen/main/friend/edit">
-                <Icon name="account-plus" type="material-community" />
-              </Link>
-            ),
+
           }}
         />
       </Drawer>
