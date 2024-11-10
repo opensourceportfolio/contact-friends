@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import * as LocalAuthentication from "expo-local-authentication";
 import { createContext, useEffect, useState } from "react";
 
@@ -20,7 +21,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setState({ authenticated: result.success });
     }
 
-    authenticate();
+    if (Constants.isDevice) {
+      authenticate();
+    }
   }, []);
 
   return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;

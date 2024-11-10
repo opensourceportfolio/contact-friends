@@ -9,7 +9,6 @@ export default function App() {
   const { session, loading } = useSession();
 
   if (session) {
-    // supabase.auth.signOut();
     return <Redirect href="/screen/main/late" />;
   }
 

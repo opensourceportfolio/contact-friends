@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import Toast from "react-native-toast-message";
 import { useFriendsData } from "../../hook/useFriendsData";
 import { lastSeen } from "../../model/frequency";
 import type { Frequency, FriendWithVisit } from "../../type/model";

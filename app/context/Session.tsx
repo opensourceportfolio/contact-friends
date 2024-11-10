@@ -19,7 +19,9 @@ export const SessionContext = createContext<SessionState>(initialState);
 
 export function SessionProvider({ children }: SessionProviderProps) {
   const [state, setState] = useState<SessionState>(initialState);
-  const setUserId = useContactFriendsStore(s => s.setUserId)
+  const setUser = useContactFriendsStore((s) => s.setUser);
+  const user = useContactFriendsStore((s) => s.user);
+  const log = useContactFriendsStore((s) => s.log);
 
   useEffect(() => {
     setState({
@@ -40,7 +42,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
             ...initialState,
             session: session,
           });
-          setUserId(session.user.id)
+          setUser(session.user);
         }
       })
       .catch((reason) => {
@@ -52,14 +54,22 @@ export function SessionProvider({ children }: SessionProviderProps) {
         }
       });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("auth state change for email: ", session?.user.email);
-      setState({
-        ...initialState,
-        session,
-      });
-    });
-  }, [setUserId]);
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        log(
+          `auth state change for email: ${session?.user.email ?? "<no user email>"}. New state: ${event}`
+        );
+        setState({
+          ...initialState,
+          session,
+        });
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <SessionContext.Provider value={state}>{children}</SessionContext.Provider>

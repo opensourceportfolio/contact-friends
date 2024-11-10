@@ -24,9 +24,9 @@ export const createFriendsSlice: StateCreator<State, [], [], FriendsSlice> = (
   setFriends: (friends) => set(() => ({ friends })),
 
   addFriend: async (friend) => {
-    const { userId } = get();
+    const { user } = get();
 
-    if (userId == null) {
+    if (user == null) {
       return Promise.reject("Not authenticated");
     }
 
@@ -53,7 +53,7 @@ export const createFriendsSlice: StateCreator<State, [], [], FriendsSlice> = (
       .update({ deleted: true })
       .eq("id", id);
 
-    console.log({ id, response }, "removeFriend");
+    get().log({ op: "removeFriend", id, response });
 
     if (response.error) {
       return Promise.reject(response.error);
@@ -65,9 +65,9 @@ export const createFriendsSlice: StateCreator<State, [], [], FriendsSlice> = (
   },
 
   async updateFriend(friend: FriendWithVisit){
-    const { userId } = get();
+    const { user } = get();
     
-    if (userId == null) {
+    if (user == null) {
       return Promise.reject("Not authenticated");
     }
 

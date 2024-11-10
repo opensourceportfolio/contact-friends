@@ -1,11 +1,11 @@
 import { Button, ButtonGroup, Image, Input } from "@rneui/themed";
+import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { FrequencyLabels } from "../../../../model/frequency";
+import { frequencyOptions, frequencyValues } from "../../../../model/frequency";
 import { useContactFriendsStore } from "../../../../store";
-import type { Frequency } from "../../../../type/model";
 
 type SearchParams = {
   friendId?: string;
@@ -17,13 +17,13 @@ export default function Edit() {
   const addFriend = useContactFriendsStore((s) => s.addFriend);
   const updateFriend = useContactFriendsStore((s) => s.updateFriend);
   const friends = useContactFriendsStore((s) => s.friends);
+  const log = useContactFriendsStore((s) => s.log);
   const friend = friends?.find((f) => friendId && f.id === Number(friendId));
+  const isNewFriend = friend == null;
 
-  const frequencyOptions = Object.keys(FrequencyLabels) as Frequency[];
-  const frequencyValues = Object.values(FrequencyLabels);
   const initialSelectedIndex = Math.max(
     frequencyOptions.findIndex((f) => friend?.frequency),
-    0,
+    0
   );
 
   const [name, setName] = useState(friend?.name ?? "");
@@ -32,7 +32,6 @@ export default function Edit() {
   const [avatar, setAvatar] = useState<string | null>(friend?.avatar ?? null);
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -41,9 +40,17 @@ export default function Edit() {
       base64: true,
     });
 
-    if (!result.canceled) {
-      setAvatar(result.assets[0].base64 ?? null);
+    if (result.canceled) {
+      return;
     }
+
+    const resizedImage = await ImageManipulator.manipulateAsync(
+      result.assets[0].uri,
+      [{ resize: { width: 400, height: 300 } }],
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+    );
+
+    setAvatar(resizedImage.base64 ?? null);
   };
 
   const handleSave = async () => {
@@ -52,7 +59,7 @@ export default function Edit() {
 
     try {
       if (friend) {
-        updateFriend({
+        await updateFriend({
           id: friend.id,
           name,
           frequency,
@@ -60,11 +67,11 @@ export default function Edit() {
           latest_date: friend.latest_date,
         });
       } else {
-        addFriend({ name, frequency, avatar });
+        await addFriend({ name, frequency, avatar });
       }
     } catch (e) {
       setLoading(false);
-      console.log({ e });
+      log({ e });
     } finally {
       setLoading(false);
       router.navigate("/screen/main/list30");
@@ -75,7 +82,7 @@ export default function Edit() {
     <View style={styles.layout}>
       <Stack.Screen
         options={{
-          title: "Add new friend",
+          title: isNewFriend ? "Edit friend" : "Add new friend",
           headerShown: true,
         }}
       />
@@ -96,19 +103,17 @@ export default function Edit() {
         }}
         containerStyle={{ marginBottom: 20 }}
       />
-      {avatar && (
-        <View style={styles.avatarPreview}>
-          <Image
-            style={styles.avatar}
-            onPress={pickImage}
-            source={{
-              uri: avatar
-                ? `data:image/jpeg;base64,${avatar}`
-                : "https://placehold.co/200/png",
-            }}
-          />
-        </View>
-      )}
+      <View style={styles.avatarPreview}>
+        <Image
+          style={styles.avatar}
+          onPress={pickImage}
+          source={{
+            uri: avatar
+              ? `data:image/jpeg;base64,${avatar}`
+              : "https://placehold.co/200/png",
+          }}
+        />
+      </View>
       <Button loading={loading} onPress={handleSave} style={styles.saveButton}>
         Save
       </Button>
@@ -131,7 +136,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   layout: {
-    // backgroundColor: "blue",
     gap: 30,
     justifyContent: "center",
     alignItems: "center",

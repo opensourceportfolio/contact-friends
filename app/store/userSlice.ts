@@ -1,29 +1,30 @@
 import type { StateCreator } from "zustand";
 import type { State } from ".";
+import { User } from "@supabase/supabase-js";
 
 type UserSliceData = {
-  userId: null | string;
+  user: User | null;
 };
 
 export type UserSlice = UserSliceData & {
-  setUserId: (userId: string | null) => void
+  setUser: (user: User | null) => void
   logout: () => void
 }
 
 export const createUsersSlice: StateCreator<State, [], [], UserSlice> = (
   set,
 ) => ({
-  userId: null,
+  user: null, 
 
-  setUserId(userId: string | null) {
+  setUser(user: User | null) {
     set({
-      userId,
+      user,
     });
   },
 
   logout() {
     set({
-      userId: null,
+      user: null,
       visits: null,
       friends: null,
     })

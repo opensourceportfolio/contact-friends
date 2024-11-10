@@ -16,13 +16,14 @@ export function useFriendsData() {
   const setFriends = useContactFriendsStore((s) => s.setFriends);
   const addFriend = useContactFriendsStore((s) => s.addFriend);
   const removeFriend = useContactFriendsStore((s) => s.removeFriend);
-
+  const log = useContactFriendsStore((s) => s.log);
+  
   useEffect(() => {
     if (friends == null) {
       setFriends([]);
       setLoading(true);
       friendsQuery().then(({ data, error }) => {
-        console.log({ data, error });
+        log({ data, error });
         setFriends((data as FriendWithVisit[]) ?? []);
         setError(error ?? undefined);
         setLoading(false);

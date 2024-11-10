@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import type { FriendWithVisit } from "../type/model";
+import type { Frequency, FriendWithVisit } from "../type/model";
 
 export const FrequencyLabels = {
   "30": "Monthly",
@@ -7,6 +7,10 @@ export const FrequencyLabels = {
   "90": "3 Months",
   "180": "6 Months",
 } as const;
+
+export const frequencyOptions = Object.keys(FrequencyLabels) as Frequency[];
+
+export const frequencyValues = Object.values(FrequencyLabels);
 
 export const lastSeen = (friend: FriendWithVisit) =>
   friend.latest_date == null

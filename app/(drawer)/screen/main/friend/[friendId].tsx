@@ -1,9 +1,9 @@
 import { Button, Divider, Image, ListItem } from "@rneui/themed";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, Text, View } from "react-native";
 import { LastSeenMessage } from "../../../../component/friends-list/LastSeenMessage";
-import { useContactFriendsStore } from "../../../../store";
 import { FrequencyLabels } from "../../../../model/frequency";
+import { useContactFriendsStore } from "../../../../store";
 
 type SearchParams = {
   friendId: string;
@@ -21,6 +21,8 @@ export default function Friend() {
     }
   };
 
+  const screenWidth = Dimensions.get('window').width;
+
   return friend ? (
     <View>
       <Stack.Screen
@@ -30,11 +32,11 @@ export default function Friend() {
         }}
       />
       <Image
-        source={{ uri: "https://source.unsplash.com/random?sig=5" }}
+        source={{ uri: `data:image/jpeg;base64,${friend.avatar}` }}
         containerStyle={{
           aspectRatio: 1,
-          width: "100%",
-          flex: 1,
+          width: screenWidth,
+          height: screenWidth,
         }}
         PlaceholderContent={<ActivityIndicator />}
       />

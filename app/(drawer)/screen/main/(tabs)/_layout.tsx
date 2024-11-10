@@ -2,9 +2,9 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Fontisto from "@expo/vector-icons/Fontisto";
-import { SearchBar } from "@rneui/themed";
 import { Tabs } from "expo-router";
 import { useAuth } from "../../../../hook/useAuth";
+import React from "react";
 
 export default function TabsLayout() {
   const { authenticated } = useAuth();
@@ -14,7 +14,7 @@ export default function TabsLayout() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Tabs>
         <Tabs.Screen
           name="late"
@@ -81,6 +81,6 @@ export default function TabsLayout() {
           }}
         />
       </Tabs>
-    </>
+    </React.Fragment>
   );
 }

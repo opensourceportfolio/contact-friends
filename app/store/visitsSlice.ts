@@ -36,7 +36,7 @@ export const createVisitsSlice: StateCreator<State, [], [], VisitsSlice> = (
       .select()
       .single();
 
-    console.log({ response, newVisit });
+    get().log({ response, newVisit });
 
     if (response.error) {
       return Promise.reject(response.error);
@@ -103,7 +103,7 @@ export const createVisitsSlice: StateCreator<State, [], [], VisitsSlice> = (
       .update({ date: visit.date })
       .eq("id", visit.id);
 
-    console.log({ response }, "updateVisit");
+    get().log({ op: "updateVisit", response });
 
     if (response.error) {
       return Promise.reject(response.error);

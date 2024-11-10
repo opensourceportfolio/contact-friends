@@ -10,6 +10,7 @@ export default function DrawerLayout() {
         <Drawer.Screen
           name="screen/main"
           options={{
+            unmountOnBlur: true,
             drawerLabel: "Friends",
             title: "Friends",
             headerRight: () => (
@@ -25,6 +26,7 @@ export default function DrawerLayout() {
         <Drawer.Screen
           name="screen/profile"
           options={{
+            unmountOnBlur: true,
             drawerLabel: "Profile",
             title: "Profile",
 
