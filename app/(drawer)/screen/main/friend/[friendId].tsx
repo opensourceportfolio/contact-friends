@@ -21,7 +21,7 @@ export default function Friend() {
     }
   };
 
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = Dimensions.get("window").width;
 
   return friend ? (
     <View>
@@ -31,15 +31,17 @@ export default function Friend() {
           headerShown: true,
         }}
       />
-      <Image
-        source={{ uri: `data:image/jpeg;base64,${friend.avatar}` }}
-        containerStyle={{
-          aspectRatio: 1,
-          width: screenWidth,
-          height: screenWidth,
-        }}
-        PlaceholderContent={<ActivityIndicator />}
-      />
+      {friend.avatar && (
+        <Image
+          source={{ uri: `data:image/jpeg;base64,${friend.avatar}` }}
+          containerStyle={{
+            aspectRatio: 1,
+            width: screenWidth,
+            height: screenWidth,
+          }}
+          PlaceholderContent={<ActivityIndicator />}
+        />
+      )}
 
       <ListItem>
         <ListItem.Content>

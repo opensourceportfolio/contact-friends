@@ -16,7 +16,7 @@ export const createLogsSlice: StateCreator<State, [], [], LogsSlice> = (
   logs: [], 
 
   log(data: any) {
-    console.log(data)
+    //console.log(data)
     set({
       logs: get().logs.concat(data),
     });

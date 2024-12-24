@@ -1,27 +1,24 @@
 import { Button, ListItem } from "@rneui/themed";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
-import { Alert, View } from "react-native";
+import { View } from "react-native";
+import { AsyncComponent } from "../../../component/AsyncComponent";
 import { supabase } from "../../../lib/supabase";
 import { useContactFriendsStore } from "../../../store";
 
 export default function Profile() {
-  const [loading] = useState(false);
+  const [action, setAction] = useState(Promise.resolve());
   const user = useContactFriendsStore((s) => s.user);
   const friends = useContactFriendsStore((s) => s.friends);
   const logout = useContactFriendsStore((s) => s.logout);
 
   async function handleLogout() {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      Alert.alert(error.message);
-    } else {
-      logout();
-      router.replace("/Auth");
-    }
+    await supabase.auth.signOut();
+    logout();
+    router.replace("/Auth");
   }
   return (
-    <React.Fragment>
+    <AsyncComponent action={action}>
       <View>
         <ListItem>
           <ListItem.Content>
@@ -32,14 +29,12 @@ export default function Profile() {
           </ListItem.Content>
         </ListItem>
         <ListItem>
-          <Button disabled={loading} onPress={handleLogout}>
-            Logout
-          </Button>
+          <Button onPress={() => setAction(handleLogout())}>Logout</Button>
         </ListItem>
         <ListItem>
           <Link href={"/screen/profile/logViewer"}>Debug</Link>
         </ListItem>
       </View>
-    </React.Fragment>
+    </AsyncComponent>
   );
 }

@@ -1,5 +1,4 @@
 import { Text } from "@rneui/themed";
-import type { AuthError } from "@supabase/supabase-js";
 import { makeRedirectUri } from "expo-auth-session";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -15,28 +14,21 @@ const redirectTo = makeRedirectUri({});
 
 export default function Confirm() {
   const { email } = useLocalSearchParams<Params>();
-  const [error, setError] = useState<AuthError | null>();
-  const [loading, setLoading] = useState(false);
+  const [action, setAction] = useState<Promise<unknown>>(new Promise(() => {}));
 
   useEffect(() => {
-    setLoading(true);
-    supabase.auth
-      .signInWithOtp({
+    setAction(
+      supabase.auth.signInWithOtp({
         email,
         options: {
           emailRedirectTo: redirectTo,
         },
       })
-      .then(({ error }) => {
-        setError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    );
   }, [email]);
 
   return (
-    <AsyncComponent error={error} loading={loading}>
+    <AsyncComponent action={action}>
       <View style={styles.container}>
         <Text h2>Check your email</Text>
       </View>

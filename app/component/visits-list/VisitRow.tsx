@@ -12,7 +12,7 @@ export function VisitRow({ visit }: VisitRowProps) {
   const removeVisit = useContactFriendsStore((s) => s.removeVisit);
 
   const handleRemoveVisit = () => {
-    removeVisit(visit.id);
+    removeVisit(visit.friend, visit.id);
   };
 
   const handleUpdateVisit = () => {
